@@ -1,13 +1,6 @@
 #!/bin/bash
 
-#Tic Tac Toe Game
-
-#-------------------------------------------------------------------------------
-
-PLAYER='o'
-declare -a MATRIX=( [1]=' ' [2]=' ' [3]=' ' \
-					[4]=' ' [5]=' ' [6]=' ' \
-					[7]=' ' [8]=' ' [9]=' ' )
+# Game Tic-tac-toe
 
 #-------------------------------------------------------------------------------
 
@@ -15,18 +8,43 @@ declare -a MATRIX=( [1]=' ' [2]=' ' [3]=' ' \
 
 print_game_field() {
 	clear
-	echo "  1  2  3 "
-	echo " --------"
+	echo "  1 2 3 "
+	echo " -------"
 	echo "1|${MATRIX[1]}|${MATRIX[2]}|${MATRIX[3]}|"
-	echo " --------"
+	echo " -------"
 	echo "2|${MATRIX[4]}|${MATRIX[5]}|${MATRIX[6]}|"
-	echo " --------"
+	echo " -------"
 	echo "3|${MATRIX[7]}|${MATRIX[8]}|${MATRIX[9]}|"
-	echo " --------"
+	echo " -------"
 }
 
 #-------------------------------------------------------------------------------
 
+# Enter row and collumn
+
+enter_row_column() {
+	echo
+	echo "\"$PLAYER\" player's turn"
+	read -n 1 -p "Enter row: " row
+	echo
+	read -n 1 -p "Enter collumn: " collumn
+	
+	if [[ "$row" != [0-9] || "$collumn" != [0-9] ]]; then
+		echo
+		echo "!!! Enter the number, not a letter !!!"
+		enter_row_column
+	elif [[ "$row" > 3 || "$collumn" > 3 ]]; then
+		echo
+		echo "!!! The number must be less or equal than to 3 !!!"
+		enter_row_column
+#	elif [[ ]]; then
+#		echo
+#		echo "!!! The square is already occupied !!!"
+#		enter_row_column
+	fi
+}
+
+#-------------------------------------------------------------------------------
 # Player's turn
 
 players_turn() {
@@ -35,14 +53,9 @@ players_turn() {
 	else
 		PLAYER='o'
 	fi
-
-	echo "Turn Player's: $PLAYER (row collumn):"
-	read p_turns
-
 	
-	row=$(echo $p_turns | cut -d ' ' -f1)
-	collumn=$(echo $p_turns | cut -d ' ' -f2)
-	
+	enter_row_column
+		
 	if [ $row -eq '1' ]; then
 		if [ $collumn -eq '1' ]; then
 			MATRIX[1]="$PLAYER"
@@ -72,7 +85,7 @@ players_turn() {
 
 #-------------------------------------------------------------------------------
 
-# Checking win player
+# Checking the winning player
 
 check_win() {
 	if [[ "${MATRIX[1]}" == "$PLAYER" && \
@@ -112,7 +125,7 @@ check_win() {
 
 #-------------------------------------------------------------------------------
 
-# Congratulations win player
+# Congratulations the winning player
 
 congratulations() {
 	clear
@@ -132,6 +145,7 @@ congratulations() {
 		echo "      %%%                  %%%    "
 		echo
 		echo "            %%%     %%%           "
+		echo
 	else
 		echo "   %%%                      %%%   "
 		echo
@@ -146,18 +160,37 @@ congratulations() {
 		echo "       %%%              %%%       "
 		echo
 		echo "   %%%                      %%%   "
+		echo
 	fi
-	exit 0
+	
+	read -n 1 -p "Do you want play again? (y/n)):" answer
+	if [ "$answer" == "y" ]; then
+		human_game_cycle
+	else
+		echo
+		exit 0
+	fi
 }
 
 #-------------------------------------------------------------------------------
 
-# Game cicle
+# Game for two players
 
-while true; do
-	print_game_field
-	players_turn
-	check_win
-done
+human_game_cycle() {
+	PLAYER='o'
+	declare -a MATRIX=( [1]=' ' [2]=' ' [3]=' ' \
+						[4]=' ' [5]=' ' [6]=' ' \
+						[7]=' ' [8]=' ' [9]=' ' )
+
+	while true; do
+		print_game_field
+		players_turn
+		check_win
+	done
+}
+
+#-------------------------------------------------------------------------------
+
+human_game_cycle
 
 #-------------------------------------------------------------------------------

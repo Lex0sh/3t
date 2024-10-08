@@ -1,2 +1,6 @@
-This is tic tac toe in bash
+### Tic-tac-toe (v1.1)
+
+------------------------
+
+Game written in bash.
 

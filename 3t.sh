@@ -37,14 +37,29 @@ enter_row_column() {
 		echo
 		echo "!!! The number must be less or equal than to 3 !!!"
 		enter_row_column
-#	elif [[ ]]; then
-#		echo
-#		echo "!!! The square is already occupied !!!"
-#		enter_row_column
 	fi
 }
 
 #-------------------------------------------------------------------------------
+
+# Checking if the square is occupied
+
+check_square_occupied() {
+	if [ "${MATRIX[$square]}" == " " ]; then
+		MATRIX[$square]="$PLAYER"
+	else
+		echo; echo; echo "!!! The square is already occupied !!!"
+		if [ $PLAYER == 'o' ]; then
+			PLAYER='x'
+		else
+			PLAYER='o'
+		fi
+		players_turn
+	fi
+}
+
+#-------------------------------------------------------------------------------
+
 # Player's turn
 
 players_turn() {
@@ -58,27 +73,36 @@ players_turn() {
 		
 	if [ $row -eq '1' ]; then
 		if [ $collumn -eq '1' ]; then
-			MATRIX[1]="$PLAYER"
+			square="1"
+			check_square_occupied
 		elif [ $collumn -eq '2' ]; then
-			MATRIX[2]="$PLAYER"
+			square="2"
+			check_square_occupied
 		else
-			MATRIX[3]="$PLAYER"
+			square="3"
+			check_square_occupied
 		fi
 	elif [ $row -eq '2' ]; then
 		if [ $collumn -eq '1' ]; then
-			MATRIX[4]="$PLAYER"
+			square="4"
+			check_square_occupied
 		elif [ $collumn -eq '2' ]; then
-			MATRIX[5]="$PLAYER"
+			square="5"
+			check_square_occupied
 		else
-			MATRIX[6]="$PLAYER"
+			square="6"
+			check_square_occupied
 		fi
 	else
 		if [ $collumn -eq '1' ]; then
-			MATRIX[7]="$PLAYER"
+			square="7"
+			check_square_occupied
 		elif [ $collumn -eq '2' ]; then
-			MATRIX[8]="$PLAYER"
+			square="8"
+			check_square_occupied
 		else
-			MATRIX[9]="$PLAYER"
+			square="9"
+			check_square_occupied
 		fi
 	fi
 }

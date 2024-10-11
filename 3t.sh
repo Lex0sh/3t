@@ -45,8 +45,8 @@ human_enter() {
 computer_enter() {
 	index=1
 	declare -a V_MOVE=([1]="1|1" [2]="1|2" [3]="1|3" \
-					   [4]="2|1" [5]="2|2" [6]="2|3" /
-					   [7]="3|1" [8]="3|2" [9]="3|3")
+						[4]="2|1" [5]="2|2" [6]="2|3" \
+						[7]="3|1" [8]="3|2" [9]="3|3")
 	unset open_square
 	for i in {1..9}; do
 		if [[ "${MATRIX[$i]}" == " " ]]; then
@@ -137,6 +137,16 @@ main_game() {
 # Checking the winning player
 
 check_win() {
+	# Counting occupied square
+	unset draw[@]
+	index1=0
+	for q in {1..9}; do
+		if [[ "${MATRIX[$q]}" != " " ]]; then
+			draw[$index1]=$q
+			let "index1 +=1"
+		fi
+	done
+
 	if [[ "${MATRIX[1]}" == "$PLAYER" && \
 		  "${MATRIX[2]}" == "$PLAYER" && \
 		  "${MATRIX[3]}" == "$PLAYER" ]]; then
@@ -169,6 +179,16 @@ check_win() {
 			"${MATRIX[5]}" == "$PLAYER" && \
 			"${MATRIX[3]}" == "$PLAYER" ]]; then
 		congratulations
+	elif [[ "${#draw[@]}" == '9' ]]; then
+		echo; echo; echo "Draw in the game!"
+		echo; read -n 1 -p "Do you want play again? (y/n)):" answer
+		if [ "$answer" == "y" ]; then
+			game_cycle
+		else
+			echo
+			exit 0
+		fi
+
 	fi
 }
 
@@ -204,7 +224,7 @@ congratulations() {
 		echo
 		echo "            %%%     %%%           "
 		echo
-	else
+	elif [ "$PLAYER" == "x" ]; then
 		echo "   %%%                      %%%   "
 		echo
 		echo "       %%%              %%%       "

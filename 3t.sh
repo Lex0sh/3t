@@ -4,6 +4,38 @@
 
 #-------------------------------------------------------------------------------
 
+# Game cycle
+
+game_cycle() {
+	clear
+	echo "Do you want to play with a human or a computer?"
+	echo
+	echo "1 - Human"
+	echo "2 - Computer"
+	echo; read -s -n 1 human_or_computer
+	case $human_or_computer in
+		1)	second_player='human';;
+		2)	second_player='computer';;
+		*)	echo "!!! You can choose only 1 or 2 !!!" && sleep 1 && game_cycle;;
+	esac
+
+	PLAYER='o'
+	declare -a V_MOVE=( [1]="1|1" [2]="1|2" [3]="1|3" \
+						[4]="2|1" [5]="2|2" [6]="2|3" \
+						[7]="3|1" [8]="3|2" [9]="3|3" )
+	declare -a MATRIX=( [1]=' ' [2]=' ' [3]=' ' \
+						[4]=' ' [5]=' ' [6]=' ' \
+						[7]=' ' [8]=' ' [9]=' ' )
+
+	while true; do
+		print_game_field
+		main_game
+		check_win
+	done
+}
+
+#-------------------------------------------------------------------------------
+
 # Print game field
 
 print_game_field() {
@@ -44,9 +76,6 @@ human_enter() {
 
 computer_enter() {
 	index=1
-	declare -a V_MOVE=([1]="1|1" [2]="1|2" [3]="1|3" \
-						[4]="2|1" [5]="2|2" [6]="2|3" \
-						[7]="3|1" [8]="3|2" [9]="3|3")
 	unset open_square
 	for i in {1..9}; do
 		if [[ "${MATRIX[$i]}" == " " ]]; then
@@ -247,35 +276,6 @@ congratulations() {
 		echo
 		exit 0
 	fi
-}
-
-#-------------------------------------------------------------------------------
-
-# Game cycle
-
-game_cycle() {
-	clear
-	echo "Do you want to play with a human or a computer?"
-	echo
-	echo "1 - Human"
-	echo "2 - Computer"
-	echo; read -s -n 1 human_or_computer
-	case $human_or_computer in
-		1)	second_player='human';;
-		2)	second_player='computer';;
-		*)	echo "!!! You can choose only 1 or 2 !!!" && sleep 1 && game_cycle;;
-	esac
-
-	PLAYER='o'
-	declare -a MATRIX=( [1]=' ' [2]=' ' [3]=' ' \
-						[4]=' ' [5]=' ' [6]=' ' \
-						[7]=' ' [8]=' ' [9]=' ' )
-
-	while true; do
-		print_game_field
-		main_game
-		check_win
-	done
 }
 
 #-------------------------------------------------------------------------------
